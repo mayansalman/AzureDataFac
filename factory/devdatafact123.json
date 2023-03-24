@@ -1,5 +1,13 @@
 {
 	"name": "devdatafact123",
+	"properties": {
+		"globalParameters": {
+			"globalParam1": {
+				"type": "string",
+				"value": "dev"
+			}
+		}
+	},
 	"location": "eastus",
 	"identity": {
 		"type": "SystemAssigned",
