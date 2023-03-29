@@ -83,7 +83,30 @@
 					"url": "https://prod-29.northcentralus.logic.azure.com:443/workflows/1b3c7836c74b40dab94c88121085b6d6/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=vKPwMzXVjlMLErdF1GIqQFvZTxNmkAxg6oe1_0fjG3M",
 					"method": "POST",
 					"body": {
-						"value": "{\n\"to\":\"salmanazuredegmail.com\",\n\"subject\":\"@{pipeline().Pipeline} is failed\",\n\"body\":\"@{activity('Copy data1').error.message}\"\n}",
+						"value": "{\n\"to\":\"salmanazurede@gmail.com\",\n\"subject\":\"@{pipeline().Pipeline} is failed\",\n\"body\":\"@{activity('Copy data1').error.message}\"\n}",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Fail1",
+				"type": "Fail",
+				"dependsOn": [
+					{
+						"activity": "Web1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"message": {
+						"value": "@activity('Copy data1').error.message",
+						"type": "Expression"
+					},
+					"errorCode": {
+						"value": "@activity('Copy data1').error.code",
 						"type": "Expression"
 					}
 				}
