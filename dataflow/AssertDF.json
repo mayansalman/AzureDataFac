@@ -1,0 +1,37 @@
+{
+	"name": "AssertDF",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "Employee",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [],
+			"transformations": [
+				{
+					"name": "assert1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          id as short,",
+				"          name as string,",
+				"          salary as short,",
+				"          deptid as short,",
+				"          country as string,",
+				"          joindate as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source1 assert(expectTrue(ERROR_FUNCTION(''), false, 'assert1')) ~> assert1"
+			]
+		}
+	}
+}
