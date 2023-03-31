@@ -10,6 +10,13 @@
 						"type": "DatasetReference"
 					},
 					"name": "source1"
+				},
+				{
+					"linkedService": {
+						"referenceName": "AzureBlobStorage1",
+						"type": "LinkedServiceReference"
+					},
+					"name": "source2"
 				}
 			],
 			"sinks": [],
@@ -30,7 +37,20 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> source1",
-				"source1 assert(expectTrue(ERROR_FUNCTION(''), false, 'assert1')) ~> assert1"
+				"source(useSchema: false,",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     format: 'delimited',",
+				"     container: 'input',",
+				"     fileName: 'dept.csv',",
+				"     columnDelimiter: ',',",
+				"     escapeChar: '\\\\',",
+				"     quoteChar: '\\\"',",
+				"     columnNamesAsHeader: true) ~> source2",
+				"source1, source2 assert(expectTrue(!isNull(toDate(joindate, 'ddMMyyyy')), false, 'assertJoiningDate', null, 'This is to assert if there are any issues with joining date '),",
+				"     expectUnique(id, false, 'assertid'),",
+				"     expectExists(deptid == deptid, false, 'assertexist')) ~> assert1"
 			]
 		}
 	}
