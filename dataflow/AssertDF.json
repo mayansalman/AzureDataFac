@@ -49,8 +49,8 @@
 				"     quoteChar: '\\\"',",
 				"     columnNamesAsHeader: true) ~> source2",
 				"source1, source2 assert(expectTrue(!isNull(toDate(joindate, 'ddMMyyyy')), false, 'assertJoiningDate', null, 'This is to assert if there are any issues with joining date '),",
-				"     expectUnique(id, false, 'assertid'),",
-				"     expectExists(deptid == deptid, false, 'assertexist')) ~> assert1"
+				"     expectExists(deptid == ERROR_FUNCTION(''), false, 'assertDept'),",
+				"     expectUnique(ERROR_FUNCTION(''), false, 'assert3')) ~> assert1"
 			]
 		}
 	}
