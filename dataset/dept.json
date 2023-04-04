@@ -20,9 +20,11 @@
 		},
 		"schema": [
 			{
+				"name": "deptid",
 				"type": "String"
 			},
 			{
+				"name": "deptname",
 				"type": "String"
 			}
 		]
