@@ -16,7 +16,7 @@
 						"referenceName": "dept",
 						"type": "DatasetReference"
 					},
-					"name": "Dept"
+					"name": "dept"
 				}
 			],
 			"sinks": [],
@@ -28,7 +28,7 @@
 					"name": "assert1"
 				},
 				{
-					"name": "split1"
+					"name": "derivedColumn2"
 				}
 			],
 			"scriptLines": [
@@ -49,15 +49,13 @@
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> Dept",
+				"     ignoreNoFilesFound: false) ~> dept",
 				"Employee derive(newJoinDate = toDate(joindate,'ddMMyyyy')) ~> derivedColumn1",
-				"derivedColumn1, Dept assert(expectTrue(!isNull(toDate(joindate,'ddMMyyyy')), false, 'assertdate'),",
-				"     expectExists(Employee@deptid == toInteger(Dept@deptid), false, 'assertDept'),",
+				"derivedColumn1, dept assert(expectTrue(!isNull(toDate(joindate,'ddMMyyyy')), false, 'assertdate'),",
+				"     expectExists(Employee@deptid == toInteger(dept@deptid), false, 'assertDept'),",
 				"     expectUnique(id, false, 'assertid')) ~> assert1",
-				"assert1 split(hasError('assertdate'),",
-				"     hasError('assertid'),",
-				"     hasError('assertDept'),",
-				"     disjoint: false) ~> split1@(assertJoinDate, assertid, assertDept, success)"
+				"assert1 derive(errored = isError(),",
+				"          joinDateErroed = hasError('assertdate')) ~> derivedColumn2"
 			]
 		}
 	}
