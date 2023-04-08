@@ -10,14 +10,50 @@
 						"type": "DatasetReference"
 					},
 					"name": "source1"
+				},
+				{
+					"dataset": {
+						"referenceName": "dep_dup",
+						"type": "DatasetReference"
+					},
+					"name": "source2"
 				}
 			],
-			"sinks": [],
-			"transformations": [],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "output_csv",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				},
+				{
+					"name": "sink2"
+				}
+			],
+			"transformations": [
+				{
+					"name": "flowlet1",
+					"flowlet": {
+						"referenceName": "removeDuplicate",
+						"type": "DataFlowReference"
+					}
+				},
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "flowlet2",
+					"flowlet": {
+						"referenceName": "removeDuplicate",
+						"type": "DataFlowReference"
+					}
+				},
+				{
+					"name": "select1"
+				}
+			],
 			"scriptLines": [
-				"parameters{",
-				"     fileName as string",
-				"}",
 				"source(output(",
 				"          id as string,",
 				"          name as string,",
@@ -25,7 +61,41 @@
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> source1"
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source(output(",
+				"          id as string,",
+				"          name as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source2",
+				"source1 compose(mapColumn(",
+				"          id,",
+				"          name,",
+				"          gender",
+				"     ),",
+				"     composition: 'removeDuplicate') ~> flowlet1@(output1)",
+				"source2 derive(gender = 'm') ~> derivedColumn1",
+				"derivedColumn1 compose(mapColumn(",
+				"          id,",
+				"          name,",
+				"          gender",
+				"     ),",
+				"     composition: 'removeDuplicate') ~> flowlet2@(output1)",
+				"flowlet2@output1 select(mapColumn(",
+				"          id,",
+				"          name",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"flowlet1@output1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink1",
+				"select1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink2"
 			]
 		}
 	}
