@@ -1,5 +1,5 @@
 {
-	"name": "Employee",
+	"name": "emp",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureBlobStorage1",
@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "emp.csv",
+				"fileName": "emp_1.csv",
 				"container": "input"
 			},
 			"columnDelimiter": ",",

@@ -1,0 +1,95 @@
+{
+	"name": "LoadEmp",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "emp_table",
+						"type": "DatasetReference"
+					},
+					"name": "empTable"
+				},
+				{
+					"dataset": {
+						"referenceName": "emp",
+						"type": "DatasetReference"
+					},
+					"name": "empFile"
+				}
+			],
+			"sinks": [
+				{
+					"name": "maxIdSink"
+				},
+				{
+					"dataset": {
+						"referenceName": "emp_table",
+						"type": "DatasetReference"
+					},
+					"name": "empTbl"
+				}
+			],
+			"transformations": [
+				{
+					"name": "surrogateKey1"
+				},
+				{
+					"name": "derivedColumn1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          max_id as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     query: 'select max(id) max_id from employee',",
+				"     format: 'query') ~> empTable",
+				"source(output(",
+				"          name as string,",
+				"          salary as string,",
+				"          deptid as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> empFile",
+				"empFile keyGenerate(output(id as long),",
+				"     startAt: 1L,",
+				"     stepValue: 1L) ~> surrogateKey1",
+				"surrogateKey1 derive(id = maxIdSink#outputs()[1].max_id+id) ~> derivedColumn1",
+				"empTable sink(validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     store: 'cache',",
+				"     format: 'inline',",
+				"     output: false,",
+				"     saveOrder: 1) ~> maxIdSink",
+				"derivedColumn1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          id as integer,",
+				"          emp_name as string,",
+				"          salary as integer,",
+				"          dept_id as integer",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          id,",
+				"          emp_name = name,",
+				"          salary,",
+				"          dept_id = deptid",
+				"     )) ~> empTbl"
+			]
+		}
+	}
+}

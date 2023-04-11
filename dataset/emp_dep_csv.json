@@ -1,5 +1,5 @@
 {
-	"name": "Employee",
+	"name": "emp_dep_csv",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureBlobStorage1",
@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "emp.csv",
+				"fileName": "emp_dup.csv",
 				"container": "input"
 			},
 			"columnDelimiter": ",",
@@ -20,15 +20,15 @@
 		},
 		"schema": [
 			{
+				"name": "id",
+				"type": "String"
+			},
+			{
 				"name": "name",
 				"type": "String"
 			},
 			{
-				"name": "salary",
-				"type": "String"
-			},
-			{
-				"name": "deptid",
+				"name": "gender",
 				"type": "String"
 			}
 		]
