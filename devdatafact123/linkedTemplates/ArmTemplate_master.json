@@ -7,6 +7,11 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "devdatafact123"
 		},
+		"devDBLS_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'devDBLS'",
+			"defaultValue": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=devser123.database.windows.net;Initial Catalog=devdb;User ID=salmanadmin"
+		},
 		"AzureBlobStorage1_properties_typeProperties_connectionString_secretName": {
 			"type": "string",
 			"defaultValue": "devstorageAC"
@@ -42,6 +47,9 @@
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
 					},
+					"devDBLS_connectionString": {
+						"value": "[parameters('devDBLS_connectionString')]"
+					},
 					"AzureKvLSDev_properties_typeProperties_baseUrl": {
 						"value": "[parameters('AzureKvLSDev_properties_typeProperties_baseUrl')]"
 					},
@@ -51,6 +59,26 @@
 				}
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "devdatafact123_ArmTemplate_1",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_1.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'devdatafact123_ArmTemplate_0')]"
+			]
 		}
 	]
 }

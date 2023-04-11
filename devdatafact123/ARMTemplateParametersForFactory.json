@@ -5,6 +5,9 @@
 		"factoryName": {
 			"value": "devdatafact123"
 		},
+		"devDBLS_connectionString": {
+			"value": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=devser123.database.windows.net;Initial Catalog=devdb;User ID=salmanadmin"
+		},
 		"AzureBlobStorage1_properties_typeProperties_connectionString_secretName": {
 			"value": "devstorageAC"
 		},
