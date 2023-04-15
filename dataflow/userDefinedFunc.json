@@ -1,0 +1,38 @@
+{
+	"name": "userDefinedFunc",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "Employee",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [],
+			"transformations": [
+				{
+					"name": "derivedColumn1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          id as short,",
+				"          name as string,",
+				"          salary as short,",
+				"          deptid as short,",
+				"          country as string,",
+				"          joindate as string,",
+				"          gender as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source1 derive(genderInt = iif(gender=='male', 1, iif(gender=='female',0,-1))) ~> derivedColumn1"
+			]
+		}
+	}
+}
