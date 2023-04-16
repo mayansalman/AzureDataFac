@@ -18,6 +18,12 @@
 					"name": "derivedColumn1"
 				}
 			],
+			"udfLibraries": [
+				{
+					"referenceName": "stringFunctions",
+					"type": "DataFlowReference"
+				}
+			],
 			"scriptLines": [
 				"source(output(",
 				"          id as short,",
@@ -31,7 +37,7 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> source1",
-				"source1 derive(genderInt = iif(gender=='male', 1, iif(gender=='female',0,-1))) ~> derivedColumn1"
+				"source1 derive(genderInt = genderToInt(gender)) ~> derivedColumn1"
 			]
 		}
 	}
