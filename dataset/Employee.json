@@ -20,6 +20,10 @@
 		},
 		"schema": [
 			{
+				"name": "id",
+				"type": "String"
+			},
+			{
 				"name": "name",
 				"type": "String"
 			},
@@ -29,6 +33,18 @@
 			},
 			{
 				"name": "deptid",
+				"type": "String"
+			},
+			{
+				"name": "country",
+				"type": "String"
+			},
+			{
+				"name": "joindate",
+				"type": "String"
+			},
+			{
+				"name": "gender",
 				"type": "String"
 			}
 		]

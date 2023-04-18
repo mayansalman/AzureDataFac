@@ -1,0 +1,49 @@
+{
+	"name": "castDF",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "Employee",
+						"type": "DatasetReference"
+					},
+					"name": "Employee"
+				}
+			],
+			"sinks": [],
+			"transformations": [
+				{
+					"name": "cast1"
+				},
+				{
+					"name": "split1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          id as string,",
+				"          name as string,",
+				"          salary as string,",
+				"          deptid as string,",
+				"          country as string,",
+				"          joindate as string,",
+				"          gender as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> Employee",
+				"Employee cast(output(",
+				"          id as integer,",
+				"          salary as integer,",
+				"          joindate as date 'ddMMyyyy'",
+				"     ),",
+				"     errors: true) ~> cast1",
+				"cast1 split(isError(),",
+				"     !isError(),",
+				"     disjoint: false) ~> split1@(errorOutput, successOutput, OtherRows)"
+			]
+		}
+	}
+}
